@@ -169,7 +169,7 @@ const Post = ({ id, post, small }) => {
       >
         <div className="d-flex align-items-center mb-3 w-100">
           <Link href={`/profile/${post?.username}`}>
-            {post.username === 'test' ? (
+            {user?.email.split('@', 1)[0] === 'test' ? (
               <Image
                 style={{ cursor: 'pointer' }}
                 src={'/avatar.png'}
@@ -181,7 +181,7 @@ const Post = ({ id, post, small }) => {
             ) : (
               <Image
                 style={{ cursor: 'pointer' }}
-                src={post.profilePicture}
+                src={user?.photoURL}
                 width={40}
                 height={40}
                 alt="Profile Image"
