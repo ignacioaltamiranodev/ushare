@@ -21,8 +21,11 @@ export const ThemeProvider = ({ children }) => {
     setDarkTheme(!darkTheme);
   };
 
-  const data = { darkTheme, toggleDarkTheme };
-  return <ThemeContext.Provider value={data}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={{ darkTheme, toggleDarkTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 
 export const useTheme = () => {

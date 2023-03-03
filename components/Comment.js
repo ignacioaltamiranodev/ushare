@@ -6,7 +6,6 @@ import Link from 'next/link';
 import relativeTime from '../utils/relativeTime';
 import { useTheme } from '../context/themeContext';
 import { useAuth } from '../context/authContext';
-import { TbLetterT } from 'react-icons/tb';
 
 const Comment = ({ id, postId, comment }) => {
   const { darkTheme } = useTheme();
@@ -19,12 +18,12 @@ const Comment = ({ id, postId, comment }) => {
   return (
     <section className="d-flex align-items-center w-100 mb-3">
       <Link href={`/profile/${comment?.username}`}>
-        {comment.username === 'test' ? (
+        {comment?.username.includes('test') || !comment.profilePicture ? (
           <Image
             style={{ cursor: 'pointer' }}
             src={'/avatar.png'}
-            width={55}
-            height={55}
+            width={45}
+            height={45}
             alt="Profile Image"
             className="rounded-circle"
           />
@@ -32,8 +31,8 @@ const Comment = ({ id, postId, comment }) => {
           <img
             style={{ cursor: 'pointer' }}
             src={comment.profilePicture}
-            width={40}
-            height={40}
+            width={35}
+            height={35}
             alt="Profile Image"
             className="rounded-circle"
           />

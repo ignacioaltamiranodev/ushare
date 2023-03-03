@@ -13,28 +13,32 @@ const SearchPage = () => {
   const filteredPosts = posts.filter(
     (post) =>
       post.data().username.toLowerCase().includes(searchTerm) ||
-      post.data().caption.toLowerCase().includes(searchTerm)
+      post.data().caption.toLowerCase().includes(searchTerm) ||
+      post.data().category.toLowerCase().includes(searchTerm)
   );
 
   if (!user) {
     push('/login');
   }
+
   return (
     <section className="container">
       <button className="btn mt-4" onClick={() => back()}>
         Go Back
       </button>
-      {filteredPosts.length < 1 ? (
-        <NoResults text={'No results found for the search term.'} />
-      ) : (
-        filteredPosts.map((post) => (
-          <Post
-            key={post.data().id}
-            id={post.data().id}
-            post={post.data()}
-            small
-          />
-        ))
+      <div className="posts mt-4">
+        {filteredPosts.length >= 1 &&
+          filteredPosts.map((post) => (
+            <Post
+              key={post.data().id}
+              id={post.data().id}
+              post={post.data()}
+              small
+            />
+          ))}
+      </div>
+      {filteredPosts.length === 0 && (
+        <NoResults text={`There are no results found for "${searchTerm}".`} />
       )}
     </section>
   );

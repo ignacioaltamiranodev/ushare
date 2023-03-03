@@ -88,7 +88,6 @@ input {
   transition: border 300ms ease-out;
   outline: none;
   padding: 1rem;
-  width: 100%;
 
   &:focus {
     border: 1px solid $secondary;
@@ -122,10 +121,14 @@ select {
   color: $primary;
 }
 
+.slick-prev:before,
+.slick-next:before {
+  color: red;
+}
+
 .btn {
   color: $white-color;
   background-color: $secondary;
-  padding: 0.5rem;
   transition: background-color 300ms ease-out;
 
   &:hover {
@@ -148,20 +151,9 @@ select {
   color: $primary;
 }
 
-.categories {
-  border-top: 1px solid $primary;
-
-  & a {
-    font-size: 2rem;
-    color: $black-color;
-  }
-  & span {
-    font-size: 1rem;
-  }
-}
-
 .category {
   cursor: pointer;
+
   & i {
     font-size: 2rem;
   }
@@ -169,7 +161,7 @@ select {
 
 .comment {
   word-wrap: break-word;
-  max-width: 32ch;
+  max-width: 25ch;
 }
 
 .comment-icon {
@@ -229,22 +221,55 @@ select {
 
 .no-results {
   min-height: 84vh;
-  @include grid-center();
+  @include flex-center();
+  flex-direction: column;
+
+  & > a {
+    color: $primary;
+  }
 }
 
 .opacity {
   opacity: 0.6;
 }
 
-.post {
-  @include flex-center();
-  flex-direction: column;
-  width: 75%;
-  border: 1px solid $primary;
+.posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
 
-  &.small {
-    width: 45%;
+.custom-img {
+  object-fit: contain;
+  width: 100% !important;
+  position: relative !important;
+  height: unset !important;
+}
+
+.unset-img {
+  width: 100%;
+
+  > div {
+    position: unset !important;
   }
+}
+
+.profile-background {
+  background: rgb(123, 119, 242);
+  background: linear-gradient(
+    90deg,
+    rgba(123, 119, 242, 1) 30%,
+    rgba(240, 119, 131, 1) 97%,
+    rgba(242, 119, 129, 1) 90%
+  );
+  background: rgb(123, 119, 242);
+  background: linear-gradient(
+    149deg,
+    rgba(123, 119, 242, 1) 30%,
+    rgba(240, 119, 131, 1) 90%,
+    rgba(242, 119, 129, 1) 98%
+  );
+  height: 18vh;
 }
 
 .sign-in {
@@ -263,18 +288,6 @@ select {
     bottom: 0px;
     left: 0px;
     z-index: -100;
-  }
-}
-
-.sponsor {
-  background-color: $gray-color;
-  height: 45vh;
-}
-
-.suggestions {
-  border-top: 1px solid $primary;
-  & span {
-    font-size: 1rem;
   }
 }
 
@@ -307,21 +320,10 @@ select {
   }
 }
 
-.user-icon {
-  font-size: 1.1rem;
-  &.plus {
-    color: $primary;
-  }
-  &.minus {
-    color: $secondary;
-  }
-}
-
 /* ***** MEDIA QUERIES ***** */
 @media screen and (max-width: 542px) {
-  input {
-    margin-right: 1rem;
-    width: 50%;
+  a.logo {
+    font-size: 1.1rem;
   }
 
   main {
@@ -330,6 +332,12 @@ select {
 
   nav {
     height: 10vh;
+  }
+
+  .avatar,
+  .profile-image {
+    height: 30px;
+    width: 30px;
   }
 
   .btn {
@@ -348,22 +356,33 @@ select {
   .comment {
     max-width: 11ch;
   }
+}
 
-  a.logo {
-    font-size: 1.1rem;
-  }
-
-  .post {
-    width: 100%;
-    &.small {
-      width: 100%;
-    }
+@media screen and (max-width: 768px) {
+  .avatar,
+  .profile-image {
+    height: 50px;
+    width: 50px;
   }
 }
 
 @media screen and (max-width: 880px) {
   .form-container form {
-    width: 100%;
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .posts article {
+    max-width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .comment {
+    width: 20ch;
   }
 }
 

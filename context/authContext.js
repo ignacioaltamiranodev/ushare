@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logOut = async () => {
-    setUser({});
+    setUser(null);
     await signOut(auth);
   };
 

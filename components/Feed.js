@@ -1,18 +1,20 @@
 import Post from './Post';
 import { usePost } from '../context/postContext';
-import LeftBar from './LeftBar';
+import CategoriesBar from './CategoriesBar';
 import NoResults from './NoResults';
-import RightBar from './RighBar';
 
 const Feed = () => {
   const { posts, categoryPosts, noResults } = usePost();
 
+  console.log(noResults);
+  console.log(categoryPosts);
+
   return (
-    <section className="container mx-auto row">
-      <section className="col-sm-4 col-3 col-lg-3">
-        <LeftBar />
-      </section>
-      <section className="col-sm-8 col-9 col-lg-6">
+    <section className="container mx-auto mt-4">
+      <aside>
+        <CategoriesBar />
+      </aside>
+      <section className={`${noResults ? '' : 'posts'} mt-4`}>
         {categoryPosts.length >= 1
           ? categoryPosts?.map((post) => (
               <Post
@@ -27,16 +29,16 @@ const Feed = () => {
         {categoryPosts.length === 0 &&
           !noResults &&
           posts?.map((post) => (
-            <Post
-              key={post.data().id}
-              id={post?.data().id}
-              post={post?.data()}
-            />
+            <>
+              <Post
+                key={post.data().id}
+                id={post?.data().id}
+                post={post?.data()}
+              />
+            </>
           ))}
       </section>
-      <section className="col-3 d-lg-block d-none">
-        <RightBar />
-      </section>
+      {/* {categoryPosts.length === 0 && !noResults && } */}
     </section>
   );
 };

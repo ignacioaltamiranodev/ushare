@@ -12,7 +12,6 @@ import {
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import Image from 'next/image';
-import { toast } from 'react-toastify';
 import { useTheme } from '../context/themeContext';
 import { useAuth } from '../context/authContext';
 
@@ -31,10 +30,6 @@ const UploadPage = () => {
   }
 
   const sendPost = async () => {
-    if (!selectedFile) {
-      toast.info('Select an image to upload, please.');
-      return;
-    }
     setLoading(true);
 
     const docRef = doc(collection(db, 'posts'));
@@ -116,7 +111,7 @@ const UploadPage = () => {
               <i>
                 <AiOutlineCloudUpload />
               </i>
-              <h4 className="my-4">Click To Upload</h4>
+              <h4 className="my-4">Click to upload an image</h4>
               <button className="btn">Select File</button>
               <input
                 type="file"
@@ -155,7 +150,7 @@ const UploadPage = () => {
               Discard
             </button>
             <button className="btn" onClick={sendPost}>
-              {loading ? 'Loading...' : 'Post Image'}
+              {loading ? 'Loading...' : 'Post'}
             </button>
           </div>
         </div>

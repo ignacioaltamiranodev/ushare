@@ -8,15 +8,18 @@ const FriendContext = createContext();
 
 export const FriendProvider = ({ children }) => {
   const [friends, setFriends] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
   useEffect(() => {
+    setLoading(true);
     if (!user) return;
     const docRef = doc(db, 'friends', user?.uid);
     var unsubscribe = onSnapshot(docRef, (doc) => {
       if (doc.exists()) {
         setFriends(doc.data().friends);
       }
+      setLoading(false);
     });
 
     return () => {
@@ -44,9 +47,12 @@ export const FriendProvider = ({ children }) => {
     );
   };
 
-  const data = { friends, followFriend, unfollowFriend };
   return (
-    <FriendContext.Provider value={data}>{children}</FriendContext.Provider>
+    <FriendContext.Provider
+      value={{ friends, loading, followFriend, unfollowFriend }}
+    >
+      {children}
+    </FriendContext.Provider>
   );
 };
 

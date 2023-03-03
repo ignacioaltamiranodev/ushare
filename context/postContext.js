@@ -27,8 +27,12 @@ export const PostProvider = ({ children }) => {
   }, []);
 
   const filterCategory = (category) => {
+    if (category === 'all') {
+      return setCategoryPosts(posts);
+    }
+
     const categoryPosts = posts.filter(
-      (post) => post.data().category === category.name
+      (post) => post.data().category === category
     );
 
     if (categoryPosts.length === 0) {
@@ -41,14 +45,19 @@ export const PostProvider = ({ children }) => {
     }
   };
 
-  const data = {
-    posts,
-    users,
-    filterCategory,
-    categoryPosts,
-    noResults,
-  };
-  return <PostContext.Provider value={data}>{children}</PostContext.Provider>;
+  return (
+    <PostContext.Provider
+      value={{
+        posts,
+        users,
+        filterCategory,
+        categoryPosts,
+        noResults,
+      }}
+    >
+      {children}
+    </PostContext.Provider>
+  );
 };
 
 export const usePost = () => {

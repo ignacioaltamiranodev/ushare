@@ -1,4 +1,3 @@
-import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useAuth } from '../context/authContext';
 import { useRouter } from 'next/router';
@@ -9,7 +8,7 @@ import { auth } from '../config/firebase.config';
 const SignupPage = () => {
   const { push } = useRouter();
   const { user, signUp } = useAuth();
-  const methods = useForm({ mode: onblur });
+  const methods = useForm({ mode: 'onSubmit' });
   const provider = new GoogleAuthProvider();
 
   if (user) {

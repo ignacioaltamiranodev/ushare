@@ -88,21 +88,15 @@ const Post = ({ id, post, small }) => {
   };
 
   return (
-    <article
-      className={
-        small
-          ? 'post small my-4 mx-auto p-3 rounded'
-          : 'post my-4 mx-auto p-3 rounded'
-      }
-    >
-      <div className="d-flex align-items-center w-100">
+    <article className="">
+      <div className="d-flex align-items-center w-100 mb-2">
         <Link href={`/profile/${post?.username}`}>
-          {post?.username === 'test' ? (
+          {post?.username?.includes('test') || !post.profilePicture ? (
             <Image
               style={{ cursor: 'pointer' }}
               src={'/avatar.png'}
-              width={40}
-              height={40}
+              width={30}
+              height={30}
               alt="Profile Image"
               className="rounded-circle"
             />
@@ -110,8 +104,8 @@ const Post = ({ id, post, small }) => {
             <Image
               style={{ cursor: 'pointer' }}
               src={post.profilePicture}
-              width={40}
-              height={40}
+              width={30}
+              height={30}
               alt="Profile Image"
               className="rounded-circle"
             />
@@ -122,17 +116,17 @@ const Post = ({ id, post, small }) => {
             <a
               className={
                 darkTheme
-                  ? 'ms-3 text-white fw-bold d-none d-md-block'
-                  : 'ms-3 text-black fw-bold d-none d-md-block'
+                  ? 'ms-2 text-white fw-bold'
+                  : 'ms-2 text-black fw-bold'
               }
             >
               {post?.username}
             </a>
           </Link>
-          <p className="ms-3 text-muted">{relativeTime(timestamp)}</p>
+          {/* <p className="ms-3 text-muted">{relativeTime(timestamp)}</p> */}
         </div>
-        <div className="ms-auto d-flex flex-column align-items-center">
-          <i className="dots-icon align-self-" onClick={displayButton}>
+        {/* <div className="ms-auto d-flex flex-column align-items-center">
+          <i className="dots-icon" onClick={displayButton}>
             <BiDotsHorizontalRounded />
           </i>
           {showButton && post?.postedBy === user?.uid && (
@@ -140,11 +134,21 @@ const Post = ({ id, post, small }) => {
               Delete
             </button>
           )}
-        </div>
+        </div> */}
       </div>
-      <p className="me-auto my-3">{post?.caption}</p>
-      <Image src={post?.image} width={500} height={500} alt="Post Image" />
-      <div className="d-flex align-items-center my-3 w-100">
+      {/* <p className="me-auto my-3">{post?.caption}</p> */}
+      {post?.image && (
+        <div>
+          <Image
+            src={post?.image}
+            width={600}
+            height={600}
+            alt="Post Image"
+            className="mb-3"
+          />
+        </div>
+      )}
+      {/* <div className="d-flex align-items-center mb-3 w-100">
         <i className="like-icon" onClick={likePost}>
           {liked ? <AiFillHeart /> : <BiHeart />}
         </i>
@@ -159,7 +163,7 @@ const Post = ({ id, post, small }) => {
         <span role="button" onClick={displayComments}>
           {comments.length === 1 ? '1 comment' : `${comments.length} comments`}
         </span>
-      </div>
+      </div> */}
       <div
         className={
           showComments && user
@@ -169,12 +173,12 @@ const Post = ({ id, post, small }) => {
       >
         <div className="d-flex align-items-center mb-3 w-100">
           <Link href={`/profile/${post?.username}`}>
-            {user?.email.split('@', 1)[0] === 'test' ? (
+            {post?.username.includes('test') || !user?.photoURL ? (
               <Image
                 style={{ cursor: 'pointer' }}
                 src={'/avatar.png'}
-                width={45}
-                height={45}
+                width={40}
+                height={40}
                 alt="Profile Image"
                 className="rounded-circle"
               />
@@ -182,8 +186,8 @@ const Post = ({ id, post, small }) => {
               <Image
                 style={{ cursor: 'pointer' }}
                 src={user?.photoURL}
-                width={40}
-                height={40}
+                width={35}
+                height={35}
                 alt="Profile Image"
                 className="rounded-circle"
               />
@@ -201,7 +205,7 @@ const Post = ({ id, post, small }) => {
           </button>
         </div>
       </div>
-      {showComments &&
+      {/* {showComments &&
         comments.length > 0 &&
         comments.map((comment) => (
           <Comment
@@ -210,7 +214,7 @@ const Post = ({ id, post, small }) => {
             postId={id}
             comment={comment.data()}
           />
-        ))}
+        ))} */}
     </article>
   );
 };

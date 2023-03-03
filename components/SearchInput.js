@@ -13,9 +13,9 @@ const SearchInput = () => {
   };
 
   return (
-    <form onSubmit={handleSearch} className="ms-auto d-none d-md-block">
+    <form onSubmit={handleSearch} className="s-auto me-3">
       <input
-        className="rounded bg-light"
+        className="rounded bg-light w-md-50 w-100"
         onChange={(e) => setSearchTerm(e.target.value)}
         value={searchTerm}
         placeholder="Search..."
