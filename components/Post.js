@@ -13,10 +13,10 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { db } from '../config/firebase.config';
 import { AiFillHeart } from 'react-icons/ai';
 import { BiHeart, BiDotsHorizontalRounded } from 'react-icons/bi';
 import { FaComments } from 'react-icons/fa';
-import { db } from '../config/firebase.config';
 import relativeTime from '../utils/relativeTime';
 import Comment from './Comment';
 import { useTheme } from '../context/themeContext';
@@ -25,21 +25,9 @@ import { useAuth } from '../context/authContext';
 const Post = ({ id, post, small }) => {
   const [likes, setLikes] = useState([]);
   const [liked, setLiked] = useState(false);
-  const [showButton, setShowButton] = useState(false);
-  const [comment, setComment] = useState('');
-  const [comments, setComments] = useState([]);
-  const [showComments, setShowComments] = useState(false);
-  const timestamp = post?.createdAt?.seconds;
+  const [loading, setLoading] = useState(false);
   const { darkTheme } = useTheme();
   const { user } = useAuth();
-
-  useEffect(() => {
-    const commentsRef = collection(db, 'posts', id, 'comments');
-    const q = query(commentsRef, orderBy('timestamp', 'desc'));
-    onSnapshot(q, (snapshot) => {
-      setComments(snapshot.docs);
-    });
-  }, []);
 
   useEffect(() => {
     onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) =>
@@ -61,34 +49,14 @@ const Post = ({ id, post, small }) => {
     }
   };
 
-  const sendComment = async () => {
-    if (comment === '') return;
-    const commentRef = doc(collection(db, 'posts', id, 'comments'));
-    await setDoc(commentRef, {
-      comment,
-      id: commentRef.id,
-      username: user?.email.split('@', 1)[0],
-      userId: user?.uid,
-      profilePicture: user?.photoURL,
-      timestamp: serverTimestamp(),
-    });
-    setComment('');
-  };
-
   const deletePost = async () => {
+    setLoading(true);
     await deleteDoc(doc(db, 'posts', id));
-  };
-
-  const displayButton = () => {
-    setShowButton((prevState) => !prevState);
-  };
-
-  const displayComments = () => {
-    setShowComments((prevState) => !prevState);
+    setLoading(false);
   };
 
   return (
-    <article className="">
+    <article className={`${loading ? 'opacity' : ''}`}>
       <div className="d-flex align-items-center w-100 mb-2">
         <Link href={`/profile/${post?.username}`}>
           {post?.username?.includes('test') || !post.profilePicture ? (
@@ -123,98 +91,32 @@ const Post = ({ id, post, small }) => {
               {post?.username}
             </a>
           </Link>
-          {/* <p className="ms-3 text-muted">{relativeTime(timestamp)}</p> */}
         </div>
-        {/* <div className="ms-auto d-flex flex-column align-items-center">
-          <i className="dots-icon" onClick={displayButton}>
-            <BiDotsHorizontalRounded />
-          </i>
-          {showButton && post?.postedBy === user?.uid && (
-            <button className="bg-danger btn delete" onClick={deletePost}>
-              Delete
-            </button>
+      </div>
+      <Link href={`/post/${id}`}>
+        <div className="content">
+          <div className="content-overlay"></div>
+          {post?.image && (
+            <>
+              <Image
+                style={{ cursor: 'pointer' }}
+                src={post?.image}
+                width={600}
+                height={600}
+                alt="Post Image"
+                className="mb-3"
+              />
+            </>
           )}
-        </div> */}
-      </div>
-      {/* <p className="me-auto my-3">{post?.caption}</p> */}
-      {post?.image && (
-        <div>
-          <Image
-            src={post?.image}
-            width={600}
-            height={600}
-            alt="Post Image"
-            className="mb-3"
-          />
-        </div>
-      )}
-      {/* <div className="d-flex align-items-center mb-3 w-100">
-        <i className="like-icon" onClick={likePost}>
-          {liked ? <AiFillHeart /> : <BiHeart />}
-        </i>
-        {likes.length > 0 && (
-          <span className="ms-2">
-            {likes.length === 1 ? '1 Like' : `${likes.length} likes`}
-          </span>
-        )}
-        <i className="ms-auto me-2 comment-icon" onClick={displayComments}>
-          <FaComments />
-        </i>
-        <span role="button" onClick={displayComments}>
-          {comments.length === 1 ? '1 comment' : `${comments.length} comments`}
-        </span>
-      </div> */}
-      <div
-        className={
-          showComments && user
-            ? 'd-flex align-items-center justify-content-center flex-column w-100 mt-3'
-            : 'd-none'
-        }
-      >
-        <div className="d-flex align-items-center mb-3 w-100">
-          <Link href={`/profile/${post?.username}`}>
-            {post?.username.includes('test') || !user?.photoURL ? (
-              <Image
-                style={{ cursor: 'pointer' }}
-                src={'/avatar.png'}
-                width={40}
-                height={40}
-                alt="Profile Image"
-                className="rounded-circle"
-              />
-            ) : (
-              <Image
-                style={{ cursor: 'pointer' }}
-                src={user?.photoURL}
-                width={35}
-                height={35}
-                alt="Profile Image"
-                className="rounded-circle"
-              />
+          <div className="text-container">
+            {post?.postedBy === user?.uid && (
+              <button className="btn delete bg-danger" onClick={deletePost}>
+                Delete
+              </button>
             )}
-          </Link>
-          <input
-            className="mx-3 w-75"
-            type="text"
-            placeholder="Write a comment"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
-          <button className="btn p-1" onClick={sendComment}>
-            Send
-          </button>
+          </div>
         </div>
-      </div>
-      {/* {showComments &&
-        comments.length > 0 &&
-        comments.map((comment) => (
-          <Comment
-            key={comment.id}
-            id={comment.id}
-            postId={id}
-            comment={comment.data()}
-          />
-        ))} */}
+      </Link>
     </article>
   );
 };

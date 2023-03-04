@@ -28,7 +28,7 @@ const Comment = ({ id, postId, comment }) => {
             className="rounded-circle"
           />
         ) : (
-          <img
+          <Image
             style={{ cursor: 'pointer' }}
             src={comment.profilePicture}
             width={35}
@@ -57,7 +57,7 @@ const Comment = ({ id, postId, comment }) => {
           {relativeTime(comment?.timestamp?.seconds)}
         </span>
         {user?.uid === comment.userId && (
-          <button className="btn delete bg-danger mt-1" onClick={deleteComment}>
+          <button className="btn bg-danger mt-1" onClick={deleteComment}>
             Delete
           </button>
         )}

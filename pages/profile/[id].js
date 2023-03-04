@@ -9,9 +9,13 @@ import { useAuth } from '../../context/authContext';
 const ProfilePage = () => {
   const { posts, users } = usePost();
   const { user } = useAuth();
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const userProfile = users.find((user) => user?.data().username === query.id);
   const userPosts = posts.filter((post) => post.data().username === query.id);
+
+  if (!user) {
+    push('/login');
+  }
 
   return (
     <section className="container mx-auto">

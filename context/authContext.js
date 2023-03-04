@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth';
 import { auth, db } from '../config/firebase.config';
 import { doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
+import Loader from '../components/Loader';
 
 const AuthContext = createContext({});
 
@@ -63,7 +64,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, users, signUp, logIn, logOut }}>
-      {loading ? null : children}
+      {loading ? <Loader /> : children}
     </AuthContext.Provider>
   );
 };

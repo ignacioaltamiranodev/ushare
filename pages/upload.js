@@ -14,15 +14,15 @@ import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import Image from 'next/image';
 import { useTheme } from '../context/themeContext';
 import { useAuth } from '../context/authContext';
+import { usePost } from '../context/postContext';
 
 const UploadPage = () => {
   const [caption, setCaption] = useState('');
-  const [category, setCategory] = useState(categories[0].name);
-  const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState(categories[0]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { push, back } = useRouter();
   const { user } = useAuth();
-  const { darkTheme } = useTheme();
   const filePickerRef = useRef(null);
 
   if (!user) {
@@ -80,7 +80,7 @@ const UploadPage = () => {
       <button className="btn my-4" onClick={() => back()}>
         Go Back
       </button>
-      <section className={loading ? 'row mx-auto opacity' : 'row mx-auto'}>
+      <section className={`${loading ? 'opacity' : ''} row mx-auto`}>
         <div
           className="col-md-5 my-auto upload-container bg-light"
           onClick={() => filePickerRef.current.click()}
@@ -103,9 +103,7 @@ const UploadPage = () => {
           ) : (
             <div
               className={
-                darkTheme
-                  ? 'd-flex justify-content-center align-items-center flex-column h-100 text-black'
-                  : 'd-flex justify-content-center align-items-center flex-column h-100'
+                'd-flex justify-content-center align-items-center flex-column h-100 text-black'
               }
             >
               <i>
@@ -139,8 +137,8 @@ const UploadPage = () => {
               onChange={(e) => setCategory(e.target.value)}
             >
               {categories.map((category, i) => (
-                <option key={i} value={category.name}>
-                  {category.name}
+                <option key={i} value={category}>
+                  {category}
                 </option>
               ))}
             </select>

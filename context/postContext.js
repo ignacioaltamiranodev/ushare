@@ -27,21 +27,17 @@ export const PostProvider = ({ children }) => {
   }, []);
 
   const filterCategory = (category) => {
-    if (category === 'all') {
-      return setCategoryPosts(posts);
-    }
-
     const categoryPosts = posts.filter(
       (post) => post.data().category === category
     );
+
+    setCategoryPosts(categoryPosts);
 
     if (categoryPosts.length === 0) {
       setNoResults(true);
       setCategoryPosts([]);
     } else {
-      categoryPosts.length >= 1;
       setNoResults(false);
-      setCategoryPosts(categoryPosts);
     }
   };
 

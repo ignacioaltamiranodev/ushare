@@ -1,17 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
 import { usePost } from '../context/postContext';
 import { categories } from '../utils/categories';
-import 'swiper/css';
-import 'swiper/css/navigation';
 import { useState } from 'react';
+import Link from 'next/link';
+import { useTheme } from '../context/themeContext';
 
 const CategoriesBar = () => {
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [activeCategory, setActiveCategory] = useState(null);
   const { filterCategory } = usePost();
+  const { darkTheme } = useTheme();
 
   return (
     <>
       <div className="d-md-flex d-flex flex-wrap align-items-center mt-3 border-top border-bottom py-3 d-none">
+        <Link href="/">
+          <a className={`${darkTheme ? 'text-white' : ''} m-3 fs-5 fw-fold`}>
+            All
+          </a>
+        </Link>
         {categories.map((category, i) => (
           <article
             key={i}
@@ -21,6 +27,7 @@ const CategoriesBar = () => {
             }}
           >
             <span
+              style={{ cursor: 'pointer' }}
               className={` ${
                 category === activeCategory ? 'category active' : 'category'
               } m-3 text-capitalize fs-5`}
