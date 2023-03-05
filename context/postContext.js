@@ -1,14 +1,70 @@
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+} from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { db } from '../config/firebase.config';
+import { useAuth } from './authContext';
 
 const PostContext = createContext();
 
 export const PostProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
   const [categoryPosts, setCategoryPosts] = useState([]);
   const [noResults, setNoResults] = useState(false);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      const docRef = doc(db, 'savedPosts', user?.uid);
+      var unsubscribe = onSnapshot(docRef, (doc) => {
+        if (doc.exists()) {
+          setSavedPosts(doc.data().posts);
+        }
+      });
+      setSavedPosts([]);
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [user]);
+
+  const savePost = async (post) => {
+    const docRef = doc(db, 'savedPosts', user?.uid);
+    const itemExists = savedPosts.find((el) => el.id === post.id);
+
+    if (itemExists) return;
+    try {
+      await setDoc(
+        docRef,
+        {
+          posts: savedPosts ? [...savedPosts, post] : [post],
+        },
+        { merge: 'true' }
+      );
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const unsavePost = async (post) => {
+    const docRef = doc(db, 'savedPosts', user?.uid);
+    await setDoc(
+      docRef,
+      {
+        posts: savedPosts.filter((el) => el.id !== post?.id),
+      },
+      { merge: 'true' }
+    );
+  };
 
   useEffect(() => {
     const postsRef = collection(db, 'posts');
@@ -49,6 +105,9 @@ export const PostProvider = ({ children }) => {
         filterCategory,
         categoryPosts,
         noResults,
+        savedPosts,
+        savePost,
+        unsavePost,
       }}
     >
       {children}

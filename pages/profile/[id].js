@@ -5,11 +5,13 @@ import { useRouter } from 'next/router';
 import Post from '../../components/Post';
 import NoResults from '../../components/NoResults';
 import { useAuth } from '../../context/authContext';
+import { useState } from 'react';
 
 const ProfilePage = () => {
-  const { posts, users } = usePost();
+  const { posts, users, savedPosts } = usePost();
   const { user } = useAuth();
   const { query, push } = useRouter();
+  const [showSavedPosts, setShowSavedPosts] = useState(false);
   const userProfile = users.find((user) => user?.data().username === query.id);
   const userPosts = posts.filter((post) => post.data().username === query.id);
 
@@ -47,14 +49,23 @@ const ProfilePage = () => {
           </div>
         </div>
         <div className="posts">
-          {userPosts?.map((post) => (
-            <Post
-              key={post.data().id}
-              id={post?.data().id}
-              post={post?.data()}
-              small
-            />
-          ))}
+          <button
+            className="btn m-auto"
+            onClick={() => setShowSavedPosts((prev) => !prev)}
+          >
+            Saved
+          </button>
+          {showSavedPosts
+            ? savedPosts.map((post) => (
+                <Post key={post?.id} id={post?.id} post={post} />
+              ))
+            : userPosts?.map((post) => (
+                <Post
+                  key={post.data().id}
+                  id={post?.data().id}
+                  post={post?.data()}
+                />
+              ))}
         </div>
         {userPosts.length === 0 && (
           <>

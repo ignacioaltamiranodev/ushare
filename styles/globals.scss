@@ -134,11 +134,32 @@ select {
   &.delete {
     padding: 0.3rem;
     font-size: 0.8rem;
+    top: -7%;
+    right: 0%;
+    z-index: 10;
+  }
+
+  &.save {
+    position: absolute;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    top: 3%;
+    right: 3%;
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
   }
 
   &.auth:hover {
     background-color: $black-color;
   }
+}
+
+.wrapper {
+  position: relative;
+}
+
+.wrapper:hover .btn.save {
+  opacity: 1;
 }
 
 .camera-icon {
@@ -149,49 +170,6 @@ select {
 .comment {
   word-wrap: break-word;
   max-width: 25ch;
-}
-
-.content {
-  cursor: pointer;
-  position: relative;
-  .content-overlay {
-    background: rgba(0, 0, 0, 0.7);
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    opacity: 0;
-    -webkit-transition: all 300ms ease-in-out;
-    -moz-transition: all 300ms ease-in-out;
-    transition: all 300ms ease-in-out;
-  }
-
-  .text-container {
-    color: $white-color;
-    position: absolute;
-    width: 100%;
-    top: 10%;
-    right: 0%;
-    opacity: 0;
-    -webkit-transition: all 300ms ease-in-out;
-    -moz-transition: all 300ms ease-in-out;
-    transition: all 300ms ease-in-out;
-  }
-
-  & > img {
-    width: 100%;
-  }
-
-  &:hover .content-overlay {
-    opacity: 1;
-  }
-
-  &:hover .text-container {
-    opacity: 1;
-  }
 }
 
 .dark {
@@ -223,6 +201,10 @@ select {
   color: $black-color;
   background-color: $white-color;
   transition: background-color 300ms ease-in;
+}
+
+.like-icon {
+  color: $primary;
 }
 
 .loader-container {

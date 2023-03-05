@@ -7,7 +7,7 @@ const Feed = () => {
   const { posts, categoryPosts, noResults } = usePost();
 
   return (
-    <section className="container mx-auto mt-4">
+    <section className="container mx-auto my-4">
       <aside>
         <CategoriesBar />
       </aside>
