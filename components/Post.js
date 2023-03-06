@@ -11,8 +11,8 @@ import { useAuth } from '../context/authContext';
 import { usePost } from '../context/postContext';
 
 const Post = ({ id, post }) => {
-  const [loading, setLoading] = useState(false);
   const [showButton, setShowButton] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { darkTheme } = useTheme();
   const { user } = useAuth();
   const { unsavePost, savePost, savedPosts } = usePost();

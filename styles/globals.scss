@@ -131,6 +131,11 @@ select {
     background-color: $primary;
   }
 
+  &.active {
+    border: none;
+    background-color: $primary;
+  }
+
   &.delete {
     padding: 0.3rem;
     font-size: 0.8rem;
@@ -353,6 +358,78 @@ select {
   .comment {
     width: 20ch;
   }
+}
+
+/* ******* HAMBURGER MENU ******* */
+.hamburger {
+  position: fixed;
+  bottom: 2vh;
+  right: 4vw;
+  width: 3rem;
+  cursor: pointer;
+  appearance: none;
+  background: none;
+  outline: none;
+  border: none;
+  padding: 0.5rem;
+  z-index: 999;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.hamburger .bar,
+.hamburger:after,
+.hamburger:before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 5px;
+  background-color: $primary;
+  margin: 6px 0px;
+  transition: 400ms;
+}
+
+.hamburger.is-active:before {
+  transform: rotate(-45deg) translate(-8px, 6px);
+}
+
+.hamburger.is-active:after {
+  transform: rotate(45deg) translate(-9px, -8px);
+}
+
+.hamburger.is-active .bar {
+  opacity: 0;
+}
+
+.open-menu {
+  @include flex-center();
+  flex-direction: column;
+  position: fixed;
+  bottom: 9%;
+  right: 5%;
+  width: 200px;
+  height: 240px;
+  background-color: $primary;
+  pointer-events: all;
+  opacity: 1;
+  transition: opacity 300ms ease-in-out;
+  z-index: 100;
+}
+
+.closed-menu {
+  @include flex-center();
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 240px;
+  background-color: $primary;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0;
 }
 
 /* ***** LOADER ***** */

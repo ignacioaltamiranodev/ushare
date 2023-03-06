@@ -6,21 +6,9 @@ import SearchInput from './SearchInput';
 import { AiOutlineLogout, AiOutlinePlus } from 'react-icons/ai';
 import ThemeButton from './ThemeButton';
 import { useAuth } from '../context/authContext';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
 
 const Navbar = () => {
   const { logOut, user } = useAuth();
-  const { push } = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      await logOut();
-      push('/login');
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
 
   return (
     <header className="bg-black sticky-top text-white">
@@ -41,7 +29,7 @@ const Navbar = () => {
               </Link>
             </div>
           ) : (
-            <div className="d-flex align-items-center">
+            <div className="align-items-center d-flex">
               <Link href={`/profile/${user?.email?.split('@', 1)[0]}`}>
                 <a className="-auto me-3 d-none d-md-block">
                   {user?.email?.split('@', 1)[0]}
@@ -70,13 +58,13 @@ const Navbar = () => {
                 )}
               </Link>
               <Link href="/upload">
-                <a className="btn fs-5 ms-3 py-md-1 px-md-2 px-1 py-0">
+                <a className="btn fs-5 ms-3 py-md-1 px-md-2 px-1 py-0 d-none d-md-block">
                   <AiOutlinePlus />
                 </a>
               </Link>
               <i
-                className="btn fs-5 ms-3 py-md-1 px-md-2 px-1 py-0"
-                onClick={handleLogout}
+                className="btn fs-5 ms-3 py-md-1 px-md-2 px-1 py-0 d-none d-md-block"
+                onClick={logOut}
               >
                 <AiOutlineLogout />
               </i>

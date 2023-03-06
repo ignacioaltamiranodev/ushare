@@ -5,25 +5,48 @@ import { useRouter } from 'next/router';
 import Post from '../../components/Post';
 import NoResults from '../../components/NoResults';
 import { useAuth } from '../../context/authContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Loader from '../../components/Loader';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../config/firebase.config';
 
 const ProfilePage = () => {
-  const { posts, users, savedPosts } = usePost();
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { posts, users } = usePost();
   const { user } = useAuth();
   const { query, push } = useRouter();
   const [showSavedPosts, setShowSavedPosts] = useState(false);
   const userProfile = users.find((user) => user?.data().username === query.id);
   const userPosts = posts.filter((post) => post.data().username === query.id);
 
+  useEffect(() => {
+    if (userProfile) {
+      const docRef = doc(db, 'savedPosts', userProfile?.data().uid);
+      var unsubscribe = onSnapshot(docRef, (doc) => {
+        if (doc.exists()) {
+          setSavedPosts(doc.data().posts);
+          setLoading(false);
+        }
+      });
+      setSavedPosts([]);
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [userProfile]);
+
   if (!user) {
     push('/login');
   }
+
+  if (loading) return <Loader />;
 
   return (
     <section className="container mx-auto">
       <section className="mt-4">
         <div className="position-relative profile-background mb-4">
-          <div className="position-absolute text-center top-50 start-50 translate-middle">
+          <div className="position-absolute text-center top-50 start-50 translate-middle text-white">
             {userProfile?.data().username.includes('test') ||
             !userProfile?.data().photoURL ? (
               <Image
@@ -31,30 +54,42 @@ const ProfilePage = () => {
                 width={75}
                 height={75}
                 alt="Profile Image"
-                className="rounded-circle avatar"
+                className="rounded-circle avatar p-1"
               />
             ) : (
               <Image
                 src={userProfile?.data().photoURL}
-                width={80}
-                height={80}
+                width={70}
+                height={70}
                 alt="Profile Image"
-                className="rounded-circle profile-image"
+                className="rounded-circle profile-image p-1"
               />
             )}
-            <h4 className="fs-2 my-2">{userProfile?.data().username}</h4>
+            <h4 className="fs-3 my-2">{userProfile?.data().username}</h4>
             <div className="d-flex justify-content-center">
               <span className="fs-6 me-3">Posts: {userPosts.length}</span>
             </div>
           </div>
         </div>
-        <div className="posts">
+        <div className="d-flex mb-4">
           <button
-            className="btn m-auto"
-            onClick={() => setShowSavedPosts((prev) => !prev)}
+            className={`${
+              !showSavedPosts ? 'active fw-bold' : ''
+            } btn text-white me-3`}
+            onClick={() => setShowSavedPosts(false)}
+          >
+            Posts
+          </button>
+          <button
+            className={`${
+              showSavedPosts ? 'active fw-bold' : ''
+            } btn text-white`}
+            onClick={() => setShowSavedPosts(true)}
           >
             Saved
           </button>
+        </div>
+        <div className="posts">
           {showSavedPosts
             ? savedPosts.map((post) => (
                 <Post key={post?.id} id={post?.id} post={post} />
@@ -79,6 +114,9 @@ const ProfilePage = () => {
               uid={userProfile?.data().uid}
             />
           </>
+        )}
+        {showSavedPosts && savedPosts.length === 0 && (
+          <p className="text-center fs-4">No saved posts yet.</p>
         )}
       </section>
     </section>

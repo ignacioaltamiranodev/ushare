@@ -12,6 +12,7 @@ import { PostProvider } from '../context/postContext';
 import { ThemeProvider } from '../context/themeContext';
 import { AuthProvider } from '../context/authContext';
 import { FriendProvider } from '../context/friendContext';
+import HamburgerMenu from '../components/HamburgerMenu';
 
 const pageVariant = {
   pageInitial: { opacity: 0 },
@@ -47,6 +48,7 @@ function MyApp({ Component, pageProps: { ...pageProps }, router }) {
                   <Component {...pageProps} />
                 </PostProvider>
               </FriendProvider>
+              <HamburgerMenu />
             </Layout>
           )}
           <ToastContainer

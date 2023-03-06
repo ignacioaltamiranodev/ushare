@@ -4,11 +4,13 @@ import { categories } from '../utils/categories';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useTheme } from '../context/themeContext';
+import { useRouter } from 'next/router';
 
 const CategoriesBar = () => {
   const [activeCategory, setActiveCategory] = useState(null);
   const { filterCategory } = usePost();
   const { darkTheme } = useTheme();
+  const { push } = useRouter();
 
   return (
     <>
@@ -41,9 +43,13 @@ const CategoriesBar = () => {
         <select
           className="text-capitalize w-50"
           onChange={(e) => {
+            if (e.target.value === 'all') push('/');
             filterCategory(e.target.value);
           }}
         >
+          <option key={'all'} className="text-capitaliz" value={'all'}>
+            All
+          </option>
           {categories.map((category, i) => (
             <option key={i} className="text-capitaliz" value={category}>
               {category}

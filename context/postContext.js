@@ -17,6 +17,7 @@ export const PostProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [categoryPosts, setCategoryPosts] = useState([]);
   const [noResults, setNoResults] = useState(false);
   const { user } = useAuth();
@@ -27,10 +28,10 @@ export const PostProvider = ({ children }) => {
       var unsubscribe = onSnapshot(docRef, (doc) => {
         if (doc.exists()) {
           setSavedPosts(doc.data().posts);
+          setLoading(false);
         }
       });
       setSavedPosts([]);
-
       return () => {
         unsubscribe();
       };
@@ -108,6 +109,7 @@ export const PostProvider = ({ children }) => {
         savedPosts,
         savePost,
         unsavePost,
+        loading,
       }}
     >
       {children}
