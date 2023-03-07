@@ -6,13 +6,11 @@ import Post from '../../components/Post';
 import NoResults from '../../components/NoResults';
 import { useAuth } from '../../context/authContext';
 import { useEffect, useState } from 'react';
-import Loader from '../../components/Loader';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../config/firebase.config';
 
 const ProfilePage = () => {
   const [savedPosts, setSavedPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { posts, users } = usePost();
   const { user } = useAuth();
   const { query, push } = useRouter();
@@ -26,7 +24,6 @@ const ProfilePage = () => {
       var unsubscribe = onSnapshot(docRef, (doc) => {
         if (doc.exists()) {
           setSavedPosts(doc.data().posts);
-          setLoading(false);
         }
       });
       setSavedPosts([]);
@@ -36,33 +33,27 @@ const ProfilePage = () => {
     }
   }, [userProfile]);
 
-  if (!user) {
-    push('/login');
-  }
-
-  if (loading) return <Loader />;
-
   return (
     <section className="container mx-auto">
       <section className="mt-4">
-        <div className="position-relative profile-background mb-4">
-          <div className="position-absolute text-center top-50 start-50 translate-middle text-white">
+        <div className="profile-background mb-4">
+          <div className="d-flex align-items-center justify-content-center flex-column text-white p-md-3">
             {userProfile?.data().username.includes('test') ||
             !userProfile?.data().photoURL ? (
               <Image
                 src={'/avatar.png'}
-                width={75}
-                height={75}
+                width={70}
+                height={70}
                 alt="Profile Image"
-                className="rounded-circle avatar p-1"
+                className="rounded-circle p-1"
               />
             ) : (
               <Image
                 src={userProfile?.data().photoURL}
-                width={70}
-                height={70}
+                width={65}
+                height={65}
                 alt="Profile Image"
-                className="rounded-circle profile-image p-1"
+                className="rounded-circle p-1"
               />
             )}
             <h4 className="fs-3 my-2">{userProfile?.data().username}</h4>
@@ -89,7 +80,7 @@ const ProfilePage = () => {
             Saved
           </button>
         </div>
-        <div className="posts">
+        <div className="posts mb-4">
           {showSavedPosts
             ? savedPosts.map((post) => (
                 <Post key={post?.id} id={post?.id} post={post} />
@@ -102,19 +93,18 @@ const ProfilePage = () => {
                 />
               ))}
         </div>
-        {userPosts.length === 0 && (
-          <>
-            <NoResults
-              text={
-                user?.uid === userProfile?.data().uid
-                  ? 'You didn´t create any post yet.'
-                  : 'There are no posts created by this user yet.'
-              }
-              profile
-              uid={userProfile?.data().uid}
-            />
-          </>
+        {userPosts.length === 0 && !showSavedPosts && (
+          <NoResults
+            text={
+              user?.uid === userProfile?.data().uid
+                ? 'You didn´t create any post yet.'
+                : 'There are no posts created by this user yet.'
+            }
+            profile
+            uid={userProfile?.data().uid}
+          />
         )}
+
         {showSavedPosts && savedPosts.length === 0 && (
           <p className="text-center fs-4">No saved posts yet.</p>
         )}

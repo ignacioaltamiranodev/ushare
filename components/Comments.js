@@ -15,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import { useAuth } from '../context/authContext';
 import { db } from '../config/firebase.config';
+import { useTheme } from '../context/themeContext';
 
 const Comments = ({ post, id }) => {
   const [likes, setLikes] = useState([]);
@@ -22,6 +23,7 @@ const Comments = ({ post, id }) => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
   const { user } = useAuth();
+  const { darkTheme } = useTheme();
 
   useEffect(() => {
     if (!id) return;
@@ -67,43 +69,51 @@ const Comments = ({ post, id }) => {
   };
 
   return (
-    <div className="col-md-5 d-flex flex-column align-items-start mb-4 ps-md-4 ps-0">
+    <div className="col-md-5 d-flex flex-column align-items-start my-md-0 my-4 ps-md-4 ps-0">
       <h2>{post?.data().caption}</h2>
       <p className="text-muted">
         {relativeTime(post?.data().createdAt.seconds)}
       </p>
-      <Link href={`/profile/${post?.data().username}`}>
-        {post?.data().username?.includes('test') ||
-        !post?.data().profilePicture ? (
-          <div className="d-flex align-items-center mt-3">
+      {post?.data().username?.includes('test') ||
+      !post?.data().profilePicture ? (
+        <div className="d-flex align-items-center mt-3">
+          <Link href={`/profile/${post?.data().username}`}>
             <Image
               style={{ cursor: 'pointer' }}
               src={'/avatar.png'}
-              width={40}
-              height={40}
+              width={35}
+              height={35}
               alt="Profile Image"
               className="rounded-circle"
             />
-            <span style={{ cursor: 'pointer' }} className="ms-2 fw-bold">
-              {post?.data().username}
-            </span>
-          </div>
-        ) : (
-          <div className="d-flex align-items-center mt-3">
+          </Link>
+          <Link
+            className={`${darkTheme ? 'text-white' : ''} ms-2 fw-bold`}
+            href={`/profile/${post?.data().username}`}
+          >
+            {post?.data().username}
+          </Link>
+        </div>
+      ) : (
+        <div className="d-flex align-items-center mt-3">
+          <Link href={`/profile/${post?.data().username}`}>
             <Image
               style={{ cursor: 'pointer' }}
               src={post?.data().profilePicture}
-              width={40}
-              height={40}
+              width={35}
+              height={35}
               alt="Profile Image"
               className="rounded-circle"
             />
-            <span style={{ cursor: 'pointer' }} className="ms-2 fw-bold">
-              {post?.data().username}
-            </span>
-          </div>
-        )}
-      </Link>
+          </Link>
+          <Link
+            className={`${darkTheme ? 'text-white' : ''} ms-2 fw-bold`}
+            href={`/profile/${post?.data().username}`}
+          >
+            {post?.data().username}
+          </Link>
+        </div>
+      )}
       <div className="d-flex align-items-center justify-content-between mb-3 w-100">
         <span className="my-3 fs-5">Comments ({comments.length})</span>
         <div>
@@ -131,8 +141,8 @@ const Comments = ({ post, id }) => {
             <Image
               style={{ cursor: 'pointer' }}
               src={'/avatar.png'}
-              width={40}
-              height={40}
+              width={35}
+              height={35}
               alt="Profile Image"
               className="rounded-circle"
             />

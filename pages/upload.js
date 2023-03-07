@@ -12,9 +12,7 @@ import {
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import Image from 'next/image';
-import { useTheme } from '../context/themeContext';
 import { useAuth } from '../context/authContext';
-import { usePost } from '../context/postContext';
 
 const UploadPage = () => {
   const [caption, setCaption] = useState('');

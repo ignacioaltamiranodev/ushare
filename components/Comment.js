@@ -22,8 +22,8 @@ const Comment = ({ id, postId, comment }) => {
           <Image
             style={{ cursor: 'pointer' }}
             src={'/avatar.png'}
-            width={45}
-            height={45}
+            width={35}
+            height={35}
             alt="Profile Image"
             className="rounded-circle"
           />
@@ -39,16 +39,15 @@ const Comment = ({ id, postId, comment }) => {
         )}
       </Link>
       <div className="d-flex flex-column">
-        <Link href={`/profile/${comment?.username}`}>
-          <a
-            className={
-              darkTheme
-                ? 'ms-3 text-white fw-bold d-none d-md-block'
-                : 'ms-3 text-black fw-bold d-none d-md-block'
-            }
-          >
-            {comment?.username}
-          </a>
+        <Link
+          className={
+            darkTheme
+              ? 'ms-3 text-white fw-bold d-none d-md-block'
+              : 'ms-3 text-black fw-bold d-none d-md-block'
+          }
+          href={`/profile/${comment?.username}`}
+        >
+          {comment?.username}
         </Link>
         <p className="mx-3 comment">{comment?.comment}</p>
       </div>
@@ -57,7 +56,7 @@ const Comment = ({ id, postId, comment }) => {
           {relativeTime(comment?.timestamp?.seconds)}
         </span>
         {user?.uid === comment.userId && (
-          <button className="btn bg-danger mt-1" onClick={deleteComment}>
+          <button className="btn delete bg-danger mt-1" onClick={deleteComment}>
             Delete
           </button>
         )}

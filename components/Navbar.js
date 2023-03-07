@@ -6,34 +6,47 @@ import SearchInput from './SearchInput';
 import { AiOutlineLogout, AiOutlinePlus } from 'react-icons/ai';
 import ThemeButton from './ThemeButton';
 import { useAuth } from '../context/authContext';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 const Navbar = () => {
   const { logOut, user } = useAuth();
+  const { push } = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      push('/login');
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <header className="bg-black sticky-top text-white">
       <nav className="d-flex align-items-center container">
         <div className="d-flex align-items-center justify-content-between w-100">
-          <Link href="/">
-            <a className="logo me-3">Ushare</a>
+          <Link className="logo me-3" href="/">
+            Ushare
           </Link>
-          <SearchInput />
+          {user && <SearchInput />}
           <ThemeButton />
           {!user ? (
             <div className="d-flex align-items-center">
-              <Link href="/login">
-                <a className="me-3 btn">Log In</a>
+              <Link className="me-3 btn" href="/login">
+                Log In
               </Link>
-              <Link href="/signup">
-                <a className="btn">Sign Up</a>
+              <Link className="btn" href="/signup">
+                Sign Up
               </Link>
             </div>
           ) : (
             <div className="align-items-center d-flex">
-              <Link href={`/profile/${user?.email?.split('@', 1)[0]}`}>
-                <a className="-auto me-3 d-none d-md-block">
-                  {user?.email?.split('@', 1)[0]}
-                </a>
+              <Link
+                className="me-3"
+                href={`/profile/${user?.email?.split('@', 1)[0]}`}
+              >
+                {user?.email?.split('@', 1)[0]}
               </Link>
               <Link href={`/profile/${user?.email?.split('@', 1)[0]}`}>
                 {user.email?.split('@', 1)[0].includes('test') ||
@@ -57,14 +70,16 @@ const Navbar = () => {
                   />
                 )}
               </Link>
-              <Link href="/upload">
-                <a className="btn fs-5 ms-3 py-md-1 px-md-2 px-1 py-0 d-none d-md-block">
-                  <AiOutlinePlus />
-                </a>
+              <Link
+                className="btn fs-5 ms-3 px-2 pt-0 d-none
+                d-md-block"
+                href="/upload"
+              >
+                <AiOutlinePlus />
               </Link>
               <i
-                className="btn fs-5 ms-3 py-md-1 px-md-2 px-1 py-0 d-none d-md-block"
-                onClick={logOut}
+                className="btn fs-5 ms-3 px-2 pt-0 d-none d-md-block"
+                onClick={handleLogout}
               >
                 <AiOutlineLogout />
               </i>

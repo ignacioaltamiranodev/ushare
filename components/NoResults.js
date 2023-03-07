@@ -11,8 +11,8 @@ const NoResults = ({ text, profile, uid }) => {
       </i>
       <h3 className="text-center">{text}</h3>
       {profile && user?.uid === uid && (
-        <Link href="/upload">
-          <a className={'mt-3 fs-5'}>Share your first post.</a>
+        <Link className="mt-3 fs-5" href="/upload">
+          Share your first post.
         </Link>
       )}
     </section>

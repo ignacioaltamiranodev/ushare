@@ -26,15 +26,17 @@ const Post = ({ id, post }) => {
   };
 
   return (
-    <article className={`${loading ? 'opacity' : ''} position-relative`}>
+    <article
+      className={`${loading ? 'opacity' : ''} position-relative mx-auto`}
+    >
       <div className="d-flex align-items-center w-100 mb-2">
         <Link href={`/profile/${post?.username}`}>
           {post?.username?.includes('test') || !post.profilePicture ? (
             <Image
               style={{ cursor: 'pointer' }}
               src={'/avatar.png'}
-              width={30}
-              height={30}
+              width={35}
+              height={35}
               alt="Profile Image"
               className="rounded-circle"
             />
@@ -49,14 +51,13 @@ const Post = ({ id, post }) => {
             />
           )}
         </Link>
-        <Link href={`/profile/${post?.username}`}>
-          <a
-            className={
-              darkTheme ? 'ms-2 text-white fw-bold' : 'ms-2 text-black fw-bold'
-            }
-          >
-            {post?.username}
-          </a>
+        <Link
+          className={
+            darkTheme ? 'ms-2 text-white fw-bold' : 'ms-2 text-black fw-bold'
+          }
+          href={`/profile/${post?.username}`}
+        >
+          {post?.username}
         </Link>
         {post?.postedBy === user?.uid && (
           <div className="ms-auto">
@@ -82,8 +83,7 @@ const Post = ({ id, post }) => {
             <Image
               style={{ cursor: 'pointer' }}
               src={post?.image}
-              width={600}
-              height={600}
+              fill
               alt="Post Image"
               className="mb-3"
             />

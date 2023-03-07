@@ -1,23 +1,25 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.scss';
-import '@fontsource/open-sans';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Router from 'next/router';
 import Loader from '../components/Loader';
 import Layout from '../components/Layout';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { PostProvider } from '../context/postContext';
 import { ThemeProvider } from '../context/themeContext';
 import { AuthProvider } from '../context/authContext';
 import { FriendProvider } from '../context/friendContext';
 import HamburgerMenu from '../components/HamburgerMenu';
+import { Lato } from 'next/font/google';
+import 'react-toastify/dist/ReactToastify.css';
 
 const pageVariant = {
   pageInitial: { opacity: 0 },
   pageAnimate: { opacity: 1 },
 };
+
+const lato = Lato({ weight: '400', subsets: ['latin'] });
 
 function MyApp({ Component, pageProps: { ...pageProps }, router }) {
   const [loading, setLoading] = useState(false);
@@ -32,6 +34,7 @@ function MyApp({ Component, pageProps: { ...pageProps }, router }) {
     <AuthProvider>
       <ThemeProvider>
         <motion.div
+          className={lato.className}
           key={router.router}
           initial="pageInitial"
           animate="pageAnimate"

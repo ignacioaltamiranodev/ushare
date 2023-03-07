@@ -15,10 +15,11 @@ const CategoriesBar = () => {
   return (
     <>
       <div className="d-md-flex d-flex flex-wrap align-items-center mt-3 border-top border-bottom py-3 d-none">
-        <Link href="/">
-          <a className={`${darkTheme ? 'text-white' : ''} m-3 fs-5 fw-fold`}>
-            All
-          </a>
+        <Link
+          className={`${darkTheme ? 'text-white' : ''} m-3 fs-5 fw-fold`}
+          href="/"
+        >
+          All
         </Link>
         {categories.map((category, i) => (
           <article
