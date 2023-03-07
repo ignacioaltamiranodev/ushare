@@ -39,7 +39,9 @@ const LoginPage = () => {
       await logIn(data.email, data.password);
       push('/');
     } catch (error) {
-      toast.error(error.message);
+      if (error.message === 'Firebase: Error (auth/user-not-found).') {
+        toast.error('Login failed. Incorrect email or password.');
+      }
     }
   };
 

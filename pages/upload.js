@@ -13,6 +13,7 @@ import {
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import Image from 'next/image';
 import { useAuth } from '../context/authContext';
+import { toast } from 'react-toastify';
 
 const UploadPage = () => {
   const [caption, setCaption] = useState('');
@@ -30,32 +31,38 @@ const UploadPage = () => {
   const sendPost = async () => {
     setLoading(true);
 
-    const docRef = doc(collection(db, 'posts'));
-    await setDoc(docRef, {
-      username: user?.email.split('@', 1)[0],
-      postedBy: user?.uid,
-      createdAt: serverTimestamp(),
-      id: docRef.id,
-      profilePicture: user?.photoURL,
-      category,
-      caption,
-    });
-
-    const imageRef = ref(storage, `/posts/${docRef.id}/image`);
-
-    if (selectedFile) {
-      await uploadString(imageRef, selectedFile, 'data_url').then(async () => {
-        const downloadURL = await getDownloadURL(imageRef);
-        await updateDoc(doc(db, 'posts', docRef.id), {
-          id: docRef.id,
-          image: downloadURL,
-        });
+    try {
+      const docRef = doc(collection(db, 'posts'));
+      await setDoc(docRef, {
+        username: user?.email.split('@', 1)[0],
+        postedBy: user?.uid,
+        createdAt: serverTimestamp(),
+        id: docRef.id,
+        profilePicture: user?.photoURL,
+        category,
+        caption,
       });
+
+      const imageRef = ref(storage, `/posts/${docRef.id}/image`);
+
+      if (selectedFile) {
+        await uploadString(imageRef, selectedFile, 'data_url').then(
+          async () => {
+            const downloadURL = await getDownloadURL(imageRef);
+            await updateDoc(doc(db, 'posts', docRef.id), {
+              id: docRef.id,
+              image: downloadURL,
+            });
+          }
+        );
+      }
+      setLoading(false);
+      setCaption('');
+      setSelectedFile(null);
+      push('/');
+    } catch (err) {
+      toast.error(err.message);
     }
-    setLoading(false);
-    setCaption('');
-    setSelectedFile(null);
-    push('/');
   };
 
   const discardPost = async () => {
@@ -84,20 +91,15 @@ const UploadPage = () => {
           onClick={() => filePickerRef.current.click()}
         >
           {selectedFile ? (
-            <>
-              <Image
-                src={selectedFile}
-                width={450}
-                height={450}
-                alt={'Selected File'}
-              />
+            <div className="position-relative selected-file-wrapper">
+              <Image src={selectedFile} fill alt={'Selected File'} />
               <input
                 hidden
                 type="file"
                 ref={filePickerRef}
                 onChange={addImageToPost}
               />
-            </>
+            </div>
           ) : (
             <div
               className={

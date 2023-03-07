@@ -9,7 +9,6 @@ import { ToastContainer } from 'react-toastify';
 import { PostProvider } from '../context/postContext';
 import { ThemeProvider } from '../context/themeContext';
 import { AuthProvider } from '../context/authContext';
-import { FriendProvider } from '../context/friendContext';
 import HamburgerMenu from '../components/HamburgerMenu';
 import { Lato } from 'next/font/google';
 import 'react-toastify/dist/ReactToastify.css';
@@ -46,11 +45,10 @@ function MyApp({ Component, pageProps: { ...pageProps }, router }) {
             </Layout>
           ) : (
             <Layout>
-              <FriendProvider>
+     
                 <PostProvider>
                   <Component {...pageProps} />
                 </PostProvider>
-              </FriendProvider>
               <HamburgerMenu />
             </Layout>
           )}

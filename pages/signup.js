@@ -46,7 +46,10 @@ const SignupPage = () => {
       await signUp(data.email, data.password);
       push('/');
     } catch (error) {
-      toast.error(error.message);
+      console.log(error.message);
+      if (error.message === 'Firebase: Error (auth/email-already-in-use).') {
+        toast.error('The user name has already been taken.');
+      }
     }
   };
 
@@ -57,7 +60,8 @@ const SignupPage = () => {
         push('/');
       })
       .catch((error) => {
-        toast.error(error.message);
+        if (error.message === 'Firebase: Error (auth/popup-closed-by-user).')
+          return;
       });
   };
 

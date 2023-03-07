@@ -13,7 +13,7 @@ const ProfilePage = () => {
   const [savedPosts, setSavedPosts] = useState([]);
   const { posts, users } = usePost();
   const { user } = useAuth();
-  const { query, push } = useRouter();
+  const { query } = useRouter();
   const [showSavedPosts, setShowSavedPosts] = useState(false);
   const userProfile = users.find((user) => user?.data().username === query.id);
   const userPosts = posts.filter((post) => post.data().username === query.id);

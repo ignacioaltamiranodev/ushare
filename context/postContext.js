@@ -52,7 +52,7 @@ export const PostProvider = ({ children }) => {
         { merge: 'true' }
       );
     } catch (err) {
-      toast.error(err.message);
+      console.log(err.message);
     }
   };
 

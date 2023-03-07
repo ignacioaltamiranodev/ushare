@@ -77,7 +77,7 @@ const Post = ({ id, post }) => {
           </div>
         )}
       </div>
-      <div className="wrapper">
+      <div className="post-img-wrapper">
         <Link href={`/post/${id}`}>
           {post?.image && (
             <Image

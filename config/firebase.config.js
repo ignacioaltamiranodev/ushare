@@ -4,12 +4,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyB-uLqCNEMkAwftqeLfk7OpwawQsgJEttM',
-  authDomain: 'social-app-82418.firebaseapp.com',
-  projectId: 'social-app-82418',
-  storageBucket: 'social-app-82418.appspot.com',
-  messagingSenderId: '501190226595',
-  appId: '1:501190226595:web:0025f01e92ac7a12aa4516',
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
